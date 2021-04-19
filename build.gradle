@@ -1,0 +1,49 @@
+plugins {
+  id 'java'
+  id 'application'
+  id 'org.mikeneck.graalvm-native-image' version 'v1.0.0'
+  id 'org.springframework.boot' version '2.4.4'
+}
+
+repositories {
+  mavenCentral()
+  jcenter()
+}
+
+version = '2.0.0'
+sourceCompatibility = JavaVersion.VERSION_16
+
+dependencies {
+  implementation 'com.sun.mail:jakarta.mail:2.0.+'
+  implementation 'org.xerial:sqlite-jdbc:3.34.+'
+  implementation 'org.yaml:snakeyaml:1.28'
+
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+application {
+  mainClass = 'wtf.ctl.mailgroup.MailGroup'
+}
+
+tasks.named('test') {
+  useJUnitPlatform()
+}
+
+bootJar {
+  archiveFileName = 'mailgroup.jar'
+  layered {
+    enabled = true
+  }
+}
+
+nativeImage {
+  graalVmHome = '/opt/graalvm'
+  mainClass = 'wtf.ctl.mailgroup.MailGroup'
+  executableName = 'mailgroup'
+  arguments {
+    add '--no-fallback'
+    add '--enable-all-security-services'
+    add '--initialize-at-run-time=java.sql.DriverManager'
+  }
+}
