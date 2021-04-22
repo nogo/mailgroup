@@ -62,7 +62,6 @@ public class Imap implements AutoCloseable {
     if (!this.store.isConnected() || message == null || message.length <= 0) return this;
 
     try {
-      this.inbox.open(Folder.READ_WRITE);
       try (Folder errors = store.getFolder(this.errorFolder)) {
         errors.open(Folder.READ_WRITE);
         this.inbox.copyMessages(message, errors);
