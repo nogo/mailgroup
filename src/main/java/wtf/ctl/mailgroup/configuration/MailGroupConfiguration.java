@@ -107,7 +107,8 @@ public class MailGroupConfiguration {
   }
 
   public boolean isValidRecipient(String email) {
-    return this.mailingList.containsKey(email);
+    if (email == null) return false;
+    return this.mailingList.containsKey(email.toLowerCase());
   }
 
   public Stream<String> streamTo() {
