@@ -5,6 +5,7 @@ import jakarta.mail.BodyPart;
 import jakarta.mail.Message;
 import jakarta.mail.Multipart;
 import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMultipart;
 import wtf.ctl.mailgroup.MailGroup;
 import wtf.ctl.mailgroup.configuration.MailGroupConfiguration;
 import wtf.ctl.mailgroup.database.DbMessage;
@@ -66,11 +67,21 @@ public class Fetch implements Runnable {
               BodyPart bodyPart = mp.getBodyPart(i);
               if (bodyPart.isMimeType("text/html")) {
                 htmlBody = (String) bodyPart.getContent();
-              } else {
+              } else if (bodyPart.isMimeType("multipart/alternative")) {
+                MimeMultipart parts = (MimeMultipart) bodyPart.getContent();
+                for (int j = 0; j  < parts.getCount(); j++) {
+                  BodyPart mmPart = parts.getBodyPart(j);
+                  if (mmPart.isMimeType("text/html")) {
+                    htmlBody = (String) mmPart.getContent();
+                  } else if (mmPart.isMimeType("text/plain")) {
+                    plainBody = (String) mmPart.getContent();
+                  }
+                }
+              } else if (bodyPart.isMimeType("text/plain")) {
                 plainBody = (String) bodyPart.getContent();
               }
             }
-          } else {
+          } else if (message.isMimeType("text/plain")) {
             plainBody = (String) message.getContent();
           }
 
