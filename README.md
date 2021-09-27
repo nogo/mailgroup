@@ -1,12 +1,11 @@
 ## Mailgroup
 
-Mailgroup is a multi-account mailing list written in Java.
+Mailgroup is a easy to manage multi-account mailing list written in Java.
 
 ## Features
 
 * Multi-accounting
 * IMAP Account connection to read emails
-* SwiftMailer to send emails
 * Access only for members of the mail group
 * Attachments are not forwarded
 * History save email in imap folder
@@ -19,4 +18,3 @@ Mailgroup is a multi-account mailing list written in Java.
 
 ## SETUP
 
-TBD
